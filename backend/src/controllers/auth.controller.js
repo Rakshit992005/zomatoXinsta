@@ -3,12 +3,17 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const foodPartnerModle = require('../models/foodpartner.model')
 
-
+const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+}
 async function registerUser(req , res) {
-    const { fullName , email , password } = req.body;
+    const { fullName , email , password , phone } = req.body;
     
     const isUserAlreadyExists = await userModel.findOne({
-        email
+        email , phone
     })
 
     if(isUserAlreadyExists){
@@ -32,7 +37,7 @@ async function registerUser(req , res) {
         id: user._id,
     } , process.env.JWT_SECRET) 
 
-    res.cookie("token" , token)
+    res.cookie("token" , token , options);
     
     res
     .status(201)
@@ -71,7 +76,7 @@ async function loginUser(req , res) {
         id: user._id,
     } , process.env.JWT_SECRET);
 
-    res.cookie("token" , token);
+    res.cookie("token" , token , options);
 
     res.status(200)
     .json({
@@ -95,7 +100,7 @@ function logoutUser(req , res) {
 }
 
 async function registerFoodPartner(req , res){
-    const { name , email , password } = req.body;
+    const { name , email , password , contactName , phone , address } = req.body;
 
     const isFoodPartnerAlreadyExists = await foodPartnerModle.findOne({email})
 
@@ -112,13 +117,16 @@ async function registerFoodPartner(req , res){
         name,
         email,
         password : hashedPassword,
+        contactName,
+        phone,
+        address,
     }) 
 
     const token = jwt.sign({
         id: foodPartner._id,
     }, process.env.JWT_SECRET);
 
-    res.cookie("token" , token);
+    res.cookie("token" , token , options);
 
     res.status(201)
     .json({
@@ -127,11 +135,11 @@ async function registerFoodPartner(req , res){
             _id: foodPartner._id,
             email : foodPartner.email,
             name : foodPartner.name,
+            contactName : foodPartner.contactName,
+            phone : foodPartner.phone,
+            address : foodPartner.address,
         }
     })
-
-
-
 }
 
 async function loginFoodPartner(req , res) {
@@ -162,7 +170,7 @@ async function loginFoodPartner(req , res) {
     } , process.env.JWT_SECRET);
 
 
-    res.cookie("token" , token)
+    res.cookie("token" , token , options);
 
     res.status(200)
     .json({

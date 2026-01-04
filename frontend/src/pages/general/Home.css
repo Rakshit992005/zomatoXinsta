@@ -1,0 +1,140 @@
+/* Reels Container */
+.reels-container {
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  background-color: #000;
+  position: relative;
+}
+
+/* Hide scrollbar but keep functionality */
+.reels-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.reels-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Individual Reel Item */
+.reel-item {
+  width: 100vw;
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Reel Video */
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Reel Overlay */
+.reel-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4) 50%, transparent);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+/* Reel Content Container */
+.reel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+/* Reel Description */
+.reel-description {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 2.8em;
+  word-break: break-word;
+}
+
+/* Reel Button */
+.reel-button {
+  align-self: flex-start;
+  background-color: #ef4f5f;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reel-button:active {
+  background-color: #d73f4f;
+  transform: scale(0.98);
+}
+
+.reel-button:hover {
+  background-color: #d73f4f;
+  box-shadow: 0 4px 12px rgba(239, 79, 95, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reel-description {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .reel-button {
+    padding: 8px 20px;
+    font-size: 12px;
+  }
+
+  .reel-overlay {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reel-description {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .reel-button {
+    padding: 8px 18px;
+    font-size: 11px;
+  }
+
+  .reel-overlay {
+    padding: 12px;
+  }
+}
