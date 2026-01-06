@@ -6,6 +6,7 @@ const foodPartnerController = require('../controllers/food-partner.controler.js'
 // /api/food-partner/:id
 router.get('/:id' ,
     authMiddleware.authUserMiddleware ,
-    foodPartnerController.getFoodPartnerById)
+    foodPartnerController.getFoodPartnerById
+)
 
 module.exports = router;
