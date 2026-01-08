@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Like = require('./likes.model');
 
 const foodSchema = new mongoose.Schema({
     name:{
@@ -15,6 +16,10 @@ const foodSchema = new mongoose.Schema({
     foodPartner : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "foodPartner",
+    },
+    Like: {
+        type : Number,
+        default : 0,
     }
 })
 
