@@ -193,6 +193,58 @@ function logoutFoodPartner(req , res){
     })
 }
 
+async function getCurrentUser(req , res) {
+    const token = req.cookies.token;
+    
+    if(!token){
+        return res.status(401)
+        .json({
+            message: "Please login first",
+        })
+    }
+
+    try {
+        const decoded = jwt.verify(token , process.env.JWT_SECRET);
+        
+        // Try to find user first
+        const user = await userModel.findById(decoded.id);
+        if(user){
+            return res.status(200).json({
+                message: "User profile fetched successfully",
+                user: {
+                    _id: user._id,
+                    fullName: user.fullName,
+                    email: user.email,
+                },
+                userType: 'user'
+            });
+        }
+        
+        // If not user, try food partner
+        const foodPartner = await foodPartnerModle.findById(decoded.id);
+        if(foodPartner){
+            return res.status(200).json({
+                message: "Food partner profile fetched successfully",
+                user: {
+                    _id: foodPartner._id,
+                    name: foodPartner.name,
+                    email: foodPartner.email,
+                },
+                userType: 'foodPartner'
+            });
+        }
+        
+        return res.status(404).json({
+            message: "User not found"
+        });
+        
+    } catch (error) {
+        return res.status(401)
+        .json({
+            message: "Invalid Token",
+        })
+    }
+}
 
 module.exports = {
     registerUser,
@@ -200,7 +252,6 @@ module.exports = {
     logoutUser,
     registerFoodPartner,
     loginFoodPartner,
-    logoutFoodPartner
-
-    
+    logoutFoodPartner,
+    getCurrentUser
 }

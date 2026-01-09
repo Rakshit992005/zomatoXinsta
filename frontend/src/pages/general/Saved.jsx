@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import './Saved.css'
 import './Home.css'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import Reel from '../../components/Reel'
 
 const Saved = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [videos, setVideos] = useState([])
   const observerRef = useRef(null)
   const [likedItems, setLikedItems] = useState({})
@@ -151,6 +152,22 @@ const Saved = () => {
     }
   }
 
+  const handleProfileClick = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.get('http://localhost:3000/api/auth/me', { withCredentials: true })
+      if (response.data.userType === 'foodPartner') {
+        navigate(`/food-partner/${response.data.user._id}`)
+      } else {
+        navigate('/profile')
+      }
+    } catch (error) {
+      console.error('Error checking user type:', error)
+      // If not logged in, redirect to login
+      navigate('/user/login')
+    }
+  }
+
   return (
     <div className="reels-container">
       {videos.length === 0 ? (
@@ -182,13 +199,17 @@ const Saved = () => {
           </svg>
           <span>home</span>
         </Link>
-        <Link to="/profile" className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill={location.pathname === '/profile' ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <a 
+          href="#" 
+          onClick={handleProfileClick}
+          className={`nav-item ${location.pathname === '/profile' || location.pathname.startsWith('/food-partner/') ? 'active' : ''}`}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill={location.pathname === '/profile' || location.pathname.startsWith('/food-partner/') ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
           <span>profile</span>
-        </Link>
+        </a>
         <Link to="/saved" className={`nav-item ${location.pathname === '/saved' ? 'active' : ''}`}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill={location.pathname === '/saved' ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
