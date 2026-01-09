@@ -20,6 +20,10 @@ const foodSchema = new mongoose.Schema({
     Like: {
         type : Number,
         default : 0,
+    },
+    Save: {
+        type : Number,
+        default : 0,
     }
 })
 

@@ -123,6 +123,22 @@
   pointer-events: auto;
 }
 
+.reel-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.reel-action-count {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  min-width: 20px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 .reel-action-btn {
   background: rgba(0, 0, 0, 0.5);
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -199,6 +215,10 @@
     width: 20px;
     height: 20px;
   }
+
+  .reel-action-count {
+    font-size: 11px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -230,6 +250,10 @@
   .reel-action-btn svg {
     width: 18px;
     height: 18px;
+  }
+
+  .reel-action-count {
+    font-size: 10px;
   }
 }
 
