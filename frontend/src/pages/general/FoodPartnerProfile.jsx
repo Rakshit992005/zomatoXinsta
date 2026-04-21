@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect , useState } from "react";
 import "./FoodPartnerProfile.css";
 import "./Home.css";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
@@ -18,6 +18,9 @@ const FoodPartnerProfile = () => {
       .then(response => {
         setprofile(response.data.foodPartner);
         setvideos(response.data.foodItems);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the food partner profile!", error);
       })
   }, [id]);
 

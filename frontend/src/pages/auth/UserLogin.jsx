@@ -5,8 +5,11 @@ import { useNavigate } from 'react-router-dom'
 
 const UserLogin = () => {
   const navigate = useNavigate();
+  const [error, setError] = React.useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('');
     // Add your login logic here
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -23,6 +26,11 @@ const UserLogin = () => {
 
     } catch (error) {
       console.error("Login error:", error);
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred during login.");
+      }
     }
   }
 
@@ -34,6 +42,8 @@ const UserLogin = () => {
           <h1>Welcome Back</h1>
           <p>Login to your account</p>
         </div>
+
+        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '5px' }}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

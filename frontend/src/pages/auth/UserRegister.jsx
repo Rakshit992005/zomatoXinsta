@@ -5,8 +5,11 @@ import { useNavigate } from 'react-router-dom'
 
 const UserRegister = () => {
   const navigate = useNavigate();
+  const [error, setError] = React.useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('');
     // Add your registration logic here 
     
     const fullName = e.target.name.value;
@@ -27,6 +30,11 @@ const UserRegister = () => {
 
     } catch (error) {
       console.error("Registration error:", error);
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred during registration.");
+      }
     }
   }
 
@@ -38,6 +46,8 @@ const UserRegister = () => {
           <h1>Create Account</h1>
           <p>Join us today and start exploring</p>
         </div>
+
+        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '5px' }}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

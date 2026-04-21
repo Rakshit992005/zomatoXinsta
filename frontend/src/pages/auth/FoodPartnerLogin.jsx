@@ -5,8 +5,11 @@ import { useNavigate } from 'react-router-dom'
 
 const FoodPartnerLogin = () => {
   const navigate = useNavigate();
+  const [error, setError] = React.useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('');
     // Add your login logic here
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -19,10 +22,20 @@ const FoodPartnerLogin = () => {
         withCredentials: true
       });
       console.log("Login successful:", response.data);
-      navigate('/create-food');
+      // Redirect to food partner's profile page
+      if (response.data.foodPartner && response.data.foodPartner._id) {
+        navigate(`/food-partner/${response.data.foodPartner._id}`);
+      } else {
+        navigate('/create-food');
+      }
 
     } catch (error) {
       console.error("Login error:", error);
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred during login.");
+      }
     }
   }
 
@@ -34,6 +47,8 @@ const FoodPartnerLogin = () => {
           <h1>Partner Login</h1>
           <p>Access your restaurant dashboard</p>
         </div>
+
+        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '5px' }}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

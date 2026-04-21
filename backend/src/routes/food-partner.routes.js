@@ -9,4 +9,10 @@ router.get('/:id' ,
     foodPartnerController.getFoodPartnerById
 )
 
+// /api/food-partner/:id/total-likes
+router.get('/:id/total-likes' ,
+    authMiddleware.authFoodPartnerMiddleware ,
+    foodPartnerController.getTotalLikesForFoodPartner
+)
+
 module.exports = router;

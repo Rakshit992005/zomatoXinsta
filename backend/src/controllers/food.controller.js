@@ -9,7 +9,20 @@ async function createFood(req, res) {
     console.log(req.body);  
     console.log(req.file);  
 
-    const fileUploadResult = await storageSrvice.uploadFile(req.file.buffer , uuid())
+    // Prefer original extension if exists properly (with a dot), else use mimetype, else fallback to mp4
+    let extName = 'mp4';
+    if (req.file.originalname && req.file.originalname.includes('.')) {
+        extName = req.file.originalname.split('.').pop();
+    } else if (req.file.mimetype) {
+        extName = req.file.mimetype.split('/').pop() || 'mp4';
+        if (extName === 'quicktime') extName = 'mov';
+    }
+    const fileName = `${uuid()}.${extName}`;
+    
+    // imagekit requires base64 string or readable stream
+    const fileBase64 = req.file.buffer.toString('base64');
+    
+    const fileUploadResult = await storageSrvice.uploadFile(fileBase64 , fileName)
     
     const foodItem = await foodModle.create({
       name : req.body.name,

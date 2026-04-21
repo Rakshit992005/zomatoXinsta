@@ -14,6 +14,12 @@ app.use(cors({
 app.use(express.json());  //midleware used to read data comming form frontend
 app.use(cookieParser());
 
+// Middleware to log every incoming request and route
+app.use((req, res, next) => {
+    console.log(`[SERVER LOG] Received ${req.method} request for route: ${req.url}`);
+    next();
+});
+
 
 app.get("/" , (req , res) =>{
     res.send("hello world")

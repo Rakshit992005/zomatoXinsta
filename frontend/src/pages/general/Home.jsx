@@ -17,6 +17,20 @@ const Home = () => {
   const [commentsCount, setCommentsCount] = useState({})
 
   useEffect(() => {
+    // Check if user is authenticated
+    axios.get('http://localhost:3000/api/auth/me', { withCredentials: true })
+      .then(response => {
+        // User is authenticated, proceed to fetch food items
+      })
+      .catch(err => {
+        if (err.response && err.response.status === 401) {
+          // User not authenticated, redirect to login
+          navigate('/user/login')
+        }
+      })
+  }, [navigate])
+
+  useEffect(() => {
     axios.get('http://localhost:3000/api/food', { withCredentials: true })
       .then(response => {
         const items = response.data.foodItems || response.data
