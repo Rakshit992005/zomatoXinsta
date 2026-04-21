@@ -12,6 +12,8 @@ const FoodPartnerProfile = () => {
   const [profile, setprofile] = useState(null)
   const [videos, setvideos] = useState([]);
   
+  const [currentUser, setCurrentUser] = useState(null);
+
   useEffect(() => {
     // Fetch profile data using the id from params
     axios.get(`http://localhost:3000/api/food-partner/${id}` , { withCredentials: true })
@@ -22,6 +24,15 @@ const FoodPartnerProfile = () => {
       .catch(error => {
         console.error("There was an error fetching the food partner profile!", error);
       })
+
+    // Fetch current logged in user to check ownership
+    axios.get('http://localhost:3000/api/auth/me', { withCredentials: true })
+      .then(response => {
+        setCurrentUser(response.data);
+      })
+      .catch(() => {
+        // Not logged in or error
+      });
   }, [id]);
 
   const handleProfileClick = async (e) => {
@@ -61,6 +72,19 @@ const FoodPartnerProfile = () => {
           </div>
         </div>
       </div>
+      
+      {/* Action Buttons for Owner */}
+      {currentUser && currentUser.userType === 'foodPartner' && currentUser.user._id === id && (
+         <div className="fp-actions" style={{ padding: '0 20px', marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => navigate('/create-food')}
+              style={{ width: '100%', padding: '12px', borderRadius: '8px', fontWeight: 'bold' }}
+            >
+              + Add Food Video
+            </button>
+         </div>
+      )}
 
       {/* Video Grid */}
       <div className="fp-grid">
